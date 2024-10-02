@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border: 1px solid #b9d4e9;
+            border-radius: 4px;
+        }
+        .text-area-container {
+            display: flex;
+            align-items: flex-start;
+        }
+        .text-area-container textarea {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .upload-container input[type="file"] {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cipher Application</h1>
+        <form id="cipherForm">
+            <label for="text">Text:</label>
+            <div class="text-area-container">
+                <textarea id="text" name="text" rows="4" required></textarea>
+                <div class="upload-container">
+                    <input type="file" id="file" name="file" accept=".txt">
+                    <button type="button" id="uploadButton">Upload</button>
+                </div>
+            </div>
+
+            <label for="key">Key:</label>
+            <input type="text" id="key" name="key" required>
+
+            <label for="cipher">Cipher Method:</label>
+            <select id="cipher" name="cipher" required>
+                <option value="vigenere">Vigenère Cipher</option>
+                <option value="auto_key_vigenere">Auto-Key Vigenère Cipher</option>
+                <option value="playfair">Playfair Cipher</option>
+                <option value="hill">Hill Cipher</option>
+                <option value="super">Super Encryption</option>
+            </select>
+
+            <label for="mode">Mode:</label>
+            <select id="mode" name="mode" required>
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+            </select>
+
+            <button type="submit">Process</button>
+        </form>
+
+        <div id="result"></div>
+
+        <form id="downloadForm" style="display: none;">
+            <button type="submit">Download Result</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('cipherForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/process', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('result').textContent = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('result').textContent = 'Result: ' + data.result;
+                    document.getElementById('downloadForm').style.display = 'block';
+                }
+            });
+        });
+
+        document.getElementById('uploadButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('file');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    document.getElementById('text').value = data.content;
+                }
+            });
+        });
+
+        document.getElementById('downloadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const result = document.getElementById('result').textContent.replace('Result: ', '');
+            const formData = new FormData();
+            formData.append('result', result);
+            fetch('/download', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'result.txt';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
