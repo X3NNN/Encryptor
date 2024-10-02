@@ -1,0 +1,24 @@
+1.Cipher Vigenère
+Plaintext: CRYPTOGRAPHY
+Key: KEY
+Ciphertext: MVWZXMQVYZLW
+
+2.Cipher Vigenère Auto-Key
+Plaintext: ENCRYPTION
+Key: SECRET
+Ciphertext: WGZVQBRWQR
+
+3.Cipher Playfair
+Plaintext: HELLO
+Key: MONARCHY
+Ciphertext: DGLLP
+
+4.Cipher Hill
+Plaintext: ACT
+Key: GYBNQKURP
+Ciphertext: POH
+
+5.Super Enkripsi
+Plaintext: SECURITY
+Key: SECRET, 123
+Ciphertext: KVIBELLC
