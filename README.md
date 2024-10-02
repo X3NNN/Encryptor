@@ -26,7 +26,6 @@ Ini adalah aplikasi cipher berbasis web yang memungkinkan pengguna untuk mengenk
 - Frontend:
   - HTML5
   - CSS3
-  - JavaScript (ES6+)
 
 ## Cara Menjalankan Program
 
