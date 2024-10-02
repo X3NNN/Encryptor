@@ -32,7 +32,7 @@ Ini adalah aplikasi cipher berbasis web yang memungkinkan pengguna untuk mengenk
 1. Pastikan Anda telah menginstal Python 3.x di sistem Anda.
 
 2. Klon repositori ini:
-git clone https://github.com/username-anda/Encryptor.git
+git clone https://X3NNN/Encryptor.git
 cd Encryptor
 
 3. Instal dependensi yang diperlukan:
